@@ -17,12 +17,12 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
+      padding: 20px;
     }
 
     .tagline,
     .logo,
-    .core-message,
-    .waitlist {
+    .core-message {
       opacity: 0;
     }
 
@@ -87,53 +87,48 @@
     }
 
     .waitlist {
-      animation: fadeIn 2s 9s forwards;
-      max-width: 800px;
-      margin-top: 40px;
-    }
-
-    .waitlist-text {
-      font-size: clamp(1rem, 2.5vw, 1.5rem);
-      margin-bottom: 20px;
-    }
-
-    .waitlist-form {
+      margin-top: 30px;
       display: flex;
-      flex-direction: row;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      font-size: clamp(0.9rem, 1.8vw, 1.2rem);
     }
 
-    .waitlist-form input[type="email"] {
-      padding: 12px 16px;
-      font-size: 1rem;
-      border: 2px solid #444;
-      border-radius: 8px;
+    .waitlist label {
+      font-weight: 500;
+    }
+
+    .waitlist form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .waitlist input[type="email"] {
+      padding: 8px 12px;
+      font-size: clamp(0.9rem, 1.2vw, 1rem);
+      border: 1px solid #444;
+      border-radius: 4px;
       background: #111;
       color: #fff;
-      width: clamp(200px, 50vw, 300px);
-      outline: none;
+      width: clamp(200px, 40vw, 300px);
     }
 
-    .waitlist-form input[type="email"]::placeholder {
-      color: #777;
-    }
-
-    .waitlist-form button {
-      padding: 12px 20px;
-      font-size: 1rem;
-      font-weight: bold;
-      background-color: #e30613;
+    .waitlist button {
+      padding: 8px 16px;
+      font-size: clamp(0.9rem, 1.2vw, 1rem);
+      background: #e30613;
       color: #fff;
       border: none;
-      border-radius: 8px;
+      border-radius: 4px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background 0.3s;
     }
 
-    .waitlist-form button:hover {
-      background-color: #ff3344;
+    .waitlist button:hover {
+      background: #ff1a28;
     }
 
     @media (min-width: 1024px) {
@@ -148,15 +143,6 @@
       }
       .coming-soon {
         font-size: clamp(0.8rem, 1.2vw, 1.1rem);
-      }
-      .waitlist-text {
-        font-size: clamp(1.2rem, 2vw, 2rem);
-      }
-      .waitlist-form input[type="email"] {
-        font-size: 1.2rem;
-      }
-      .waitlist-form button {
-        font-size: 1.2rem;
       }
     }
   </style>
@@ -175,14 +161,14 @@
       The must-have companion app for <span class="highlight">Pokémon GO</span> players who want to dive deeper into their stats, see how they stack up against the community, and flex their achievements.
     </div>
     <div class="coming-soon">Coming soon...</div>
-  </div>
 
-  <div class="waitlist">
-    <div class="waitlist-text">Get early access to PlayerZero:</div>
-    <form class="waitlist-form">
-      <input type="email" placeholder="Your Email Address" required>
-      <button type="submit">Join The Waitlist</button>
-    </form>
+    <div class="waitlist">
+      <label for="email">Get early access to PlayerZero:</label>
+      <form>
+        <input type="email" id="email" placeholder="Your Email Address" required>
+        <button type="submit">Join The Waitlist</button>
+      </form>
+    </div>
   </div>
 </body>
 </html>
