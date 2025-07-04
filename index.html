@@ -17,6 +17,7 @@
       justify-content: center;
       height: 100vh;
     }
+
     .tagline,
     .logo,
     .core-message {
@@ -35,70 +36,3 @@
       animation:
         fadeIn 2s forwards,
         fadeOut 2s 2.5s forwards;
-      font-size: clamp(1.2rem, 4vw, 2.5rem);
-      margin-bottom: 30px;
-    }
-
-    .logo {
-      width: clamp(250px, 62.5vw, 500px);
-      height: auto;
-      margin-bottom: 30px;
-      animation: fadeIn 2s 5s forwards;
-    }
-
-    .core-message {
-      animation: fadeIn 2s 7s forwards;
-      max-width: 800px;
-    }
-
-    .power-words {
-      font-size: clamp(1.2rem, 4vw, 2.5rem);
-      font-weight: bold;
-      margin: 20px 0;
-    }
-
-    .teaser {
-      font-size: clamp(0.9rem, 2vw, 1.2rem);
-      color: #ddd;
-      margin: 20px;
-    }
-
-    .coming-soon {
-      color: #ccc;
-      margin-top: 20px;
-      font-size: clamp(0.8rem, 1.8vw, 1.2rem);
-    }
-
-    @media (min-width: 1024px) {
-      .logo {
-        width: clamp(500px, 37.5vw, 875px);
-      }
-      .power-words {
-        font-size: clamp(1.5rem, 3vw, 3rem);
-      }
-      .teaser {
-        font-size: clamp(1.2rem, 3vw, 2rem);
-      }
-      .coming-soon {
-        font-size: clamp(1.2rem, 2vw, 1.8rem);
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="tagline">
-    <div>It’s not what you’ve already accomplished…</div>
-    <div>It’s what you’re about to…</div>
-  </div>
-
-  <img src="/images/A6-PlayerZero.png" alt="PlayerZero Logo" class="logo" />
-
-  <div class="core-message">
-    <div class="power-words">Track. Compete. Flex.</div>
-    <div class="teaser">
-      The must-have Pokémon GO companion for players who want to dive deeper into their stats, see how they stack up against the community, and flex their achievements.
-    </div>
-    <div class="coming-soon">Coming soon...</div>
-  </div>
-</body>
-</html>
