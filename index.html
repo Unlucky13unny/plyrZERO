@@ -4,32 +4,55 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PlayerZero</title>
-  <link rel="icon" type="image/png" href="/images/c5.png" />
-
   <style>
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      height: 100%;
       background: linear-gradient(to bottom, #000000, #222222);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      text-align: center;
-      overflow: hidden;
-      font-family: 'Helvetica Neue', sans-serif;
       color: #fff;
+      text-align: center;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
-
-    .tagline {
-      opacity: 1;
-      font-size: clamp(1.2rem, 4vw, 2.5rem);
-      line-height: 1.4;
-      margin: 0 clamp(10px, 5vw, 40px);
-    }
-
     .logo {
       width: clamp(250px, 62.5vw, 500px);
       height: auto;
-      margin-bottom: clamp(20p
+      margin-bottom: 30px;
+      opacity: 1;
+    }
+    .power-words {
+      font-size: clamp(1.2rem, 4vw, 2.5rem);
+      font-weight: bold;
+      margin: 20px 0;
+    }
+    .teaser {
+      max-width: 800px;
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      color: #ddd;
+      margin: 20px;
+    }
+    .coming-soon {
+      color: #ccc;
+      margin-top: 20px;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+    }
+  </style>
+</head>
+<body>
+  <div class="tagline">
+    <div>It’s not what you’ve already accomplished…</div>
+    <div>It’s what you’re about to…</div>
+  </div>
+
+  <img src="/images/A6-PlayerZero.png" alt="PlayerZero Logo" class="logo" />
+
+  <div class="power-words">Track. Compete. Flex.</div>
+  <div class="teaser">
+    The must-have Pokémon GO companion for players who want to dive deeper into their stats, see how they stack up against the community, and flex their achievements.
+  </div>
+  <div class="coming-soon">Coming soon...</div>
+</body>
+</html>
