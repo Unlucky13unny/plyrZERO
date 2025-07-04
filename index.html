@@ -19,6 +19,27 @@
       height: 100vh;
     }
 
+    .tagline,
+    .logo,
+    .core-message {
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; }
+    }
+
+    .tagline {
+      animation:
+        fadeIn 2s forwards,
+        fadeOut 2s 2.5s forwards;
+      margin-bottom: 30px;
+    }
+
     .tagline .line-one {
       font-size: clamp(1.2rem, 3vw, 2.2rem);
       font-weight: 400;
@@ -34,9 +55,11 @@
       width: clamp(250px, 62.5vw, 500px);
       height: auto;
       margin-bottom: 30px;
+      animation: fadeIn 2s 5s forwards;
     }
 
     .core-message {
+      animation: fadeIn 2s 7s forwards;
       max-width: 800px;
     }
 
