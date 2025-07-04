@@ -21,7 +21,8 @@
 
     .tagline,
     .logo,
-    .core-message {
+    .core-message,
+    .waitlist {
       opacity: 0;
     }
 
@@ -85,6 +86,56 @@
       font-size: clamp(0.8rem, 1.8vw, 1.2rem);
     }
 
+    .waitlist {
+      animation: fadeIn 2s 9s forwards;
+      max-width: 800px;
+      margin-top: 40px;
+    }
+
+    .waitlist-text {
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      margin-bottom: 20px;
+    }
+
+    .waitlist-form {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .waitlist-form input[type="email"] {
+      padding: 12px 16px;
+      font-size: 1rem;
+      border: 2px solid #444;
+      border-radius: 8px;
+      background: #111;
+      color: #fff;
+      width: clamp(200px, 50vw, 300px);
+      outline: none;
+    }
+
+    .waitlist-form input[type="email"]::placeholder {
+      color: #777;
+    }
+
+    .waitlist-form button {
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      background-color: #e30613;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .waitlist-form button:hover {
+      background-color: #ff3344;
+    }
+
     @media (min-width: 1024px) {
       .logo {
         width: clamp(500px, 37.5vw, 875px);
@@ -97,6 +148,15 @@
       }
       .coming-soon {
         font-size: clamp(0.8rem, 1.2vw, 1.1rem);
+      }
+      .waitlist-text {
+        font-size: clamp(1.2rem, 2vw, 2rem);
+      }
+      .waitlist-form input[type="email"] {
+        font-size: 1.2rem;
+      }
+      .waitlist-form button {
+        font-size: 1.2rem;
       }
     }
   </style>
@@ -115,6 +175,14 @@
       The must-have companion app for <span class="highlight">Pokémon GO</span> players who want to dive deeper into their stats, see how they stack up against the community, and flex their achievements.
     </div>
     <div class="coming-soon">Coming soon...</div>
+  </div>
+
+  <div class="waitlist">
+    <div class="waitlist-text">Get early access to PlayerZero:</div>
+    <form class="waitlist-form">
+      <input type="email" placeholder="Your Email Address" required>
+      <button type="submit">Join The Waitlist</button>
+    </form>
   </div>
 </body>
 </html>
