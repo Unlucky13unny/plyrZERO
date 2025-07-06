@@ -84,7 +84,7 @@
     .coming-soon {
       color: #ccc;
       margin-top: 20px;
-      font-size: clamp(0.8rem, 1.8vw, 1.2rem);
+      font-size: clamp(0.8rem, 1.8vw, 1.1rem);
     }
 
     .contact {
@@ -93,30 +93,44 @@
       flex-direction: column;
       align-items: center;
       gap: 16px;
-      font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+      font-size: clamp(0.8rem, 1.2vw, 1.1rem);
     }
 
     .contact p {
       margin: 0;
-      line-height: 1.4;
-      max-width: 600px;
+      color: #fff;
+      text-align: center;
     }
 
-    .contact a {
-      color: #e30613;
+    .social-links {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .social-links a {
+      color: #fff;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-weight: bold;
+      font-weight: normal;
+      font-size: clamp(0.8rem, 1.2vw, 1.1rem);
     }
 
-    .contact a:hover {
+    .social-links a i {
+      color: #e30613;
+      font-size: 1.2em;
+    }
+
+    .social-links a span {
+      color: #fff;
+    }
+
+    .social-links a:hover span {
       color: #ff1a28;
-    }
-
-    .contact i {
-      font-size: 1.5em;
     }
 
     @media (min-width: 1024px) {
@@ -151,18 +165,16 @@
     <div class="coming-soon">Coming soon...</div>
 
     <div class="contact">
-      <p>plyrZERO is in development — and we’re keeping it under wraps… for now.<br><br>
-      Curious to learn more? Connect with me directly:</p>
+      <p>Curious to learn more or be the first to know when we launch? Connect with me directly:</p>
       
-      <a href="#" onclick="navigator.clipboard.writeText('plyrZERO_Official'); alert('Discord handle copied to clipboard!'); return false;">
-        <i class="fa-brands fa-discord"></i> plyrZERO_Official
-      </a>
-      
-      <a href="https://www.reddit.com/user/plyrZERO_Official" target="_blank">
-        <i class="fa-brands fa-reddit"></i> u/plyrZERO_Official
-      </a>
-
-      <p>Let’s talk — and you’ll be the first to know when we launch.</p>
+      <div class="social-links">
+        <a href="#" onclick="navigator.clipboard.writeText('plyrZERO_Official'); alert('Discord handle copied to clipboard!'); return false;">
+          <i class="fa-brands fa-discord"></i> <span>plyrZERO_Official</span>
+        </a>
+        <a href="https://www.reddit.com/user/plyrZERO_Official" target="_blank">
+          <i class="fa-brands fa-reddit"></i> <span>u/plyrZERO_Official</span>
+        </a>
+      </div>
     </div>
   </div>
 </body>
