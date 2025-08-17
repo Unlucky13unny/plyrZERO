@@ -21,11 +21,7 @@
     @keyframes fadeIn { to { opacity: 1; } }
     @keyframes fadeOut { to { opacity: 0; } }
 
-    .tagline {
-      animation: fadeIn 2s forwards, fadeOut 2s 2.5s forwards;
-      margin-bottom: 30px;
-      pointer-events: none; /* prevents any overlay from blocking clicks */
-    }
+    .tagline { animation: fadeIn 2s forwards, fadeOut 2s 2.5s forwards; margin-bottom: 30px; pointer-events:none; }
     .tagline .line-one { font-size: clamp(1.2rem, 3vw, 2.2rem); font-weight: 400; }
     .tagline .line-two { font-size: clamp(1.5rem, 4vw, 2.8rem); font-weight: 600; margin-top: 10px; }
 
@@ -42,31 +38,19 @@
     .social-links a i { color: var(--pz-red); font-size: 1.2em; transition: color .3s; }
     .social-links a:hover i { color: #ff1a28; }
 
-    /* Summit CTA + results */
     .cta { margin-top: 28px; display:flex; justify-content:center; }
-    .btn {
-      padding: 12px 18px; border: 0; border-radius: 10px; font-weight: 800; cursor: pointer;
-      background: var(--pz-red); color: #fff; position: relative; z-index: 1;
-    }
+    .btn { padding: 12px 18px; border: 0; border-radius: 10px; font-weight: 800; cursor: pointer; background: var(--pz-red); color: #fff; position: relative; z-index: 1; }
 
     dialog#summitDialog { padding:0; border:0; border-radius:16px; max-width:520px; width:92%; }
     dialog::backdrop { background: rgba(0,0,0,.6); }
     #summitForm { background:#111; color:#fff; padding:24px; border-radius:16px; text-align:left; }
     #summitForm label { display:block; margin:12px 0 6px; font-weight:600; }
-    #summitForm input {
-      width:100%; padding:10px; border-radius:10px; border:1px solid #333; background:#1a1a1a; color:#fff;
-    }
+    #summitForm input { width:100%; padding:10px; border-radius:10px; border:1px solid #333; background:#1a1a1a; color:#fff; }
     #calcNote { display:none; margin-top:12px; font-size:.9rem; color:#bbb; }
 
     #cardWrap { margin-top:26px; display:none; flex-direction:column; align-items:center; gap:10px }
-    #summitCard { max-width:840px; width:100%; height:auto; border-radius:18px; }
-
-    @media (min-width:1024px){
-      .logo { width: clamp(500px, 37.5vw, 875px); }
-      .power-words { font-size: clamp(1.5rem, 3vw, 3rem); }
-      .teaser { font-size: clamp(0.9rem, 1.5vw, 1.2rem); }
-      .coming-soon { font-size: clamp(0.8rem, 1.2vw, 1.1rem); }
-    }
+    /* smaller on page */
+    #summitCard { width: clamp(320px, 70vw, 520px); height:auto; border-radius:18px; }
   </style>
 </head>
 <body>
@@ -98,7 +82,6 @@
         </a>
       </div>
 
-      <!-- Summit CTA (cryptic label) -->
       <div class="cta">
         <button id="openSummit" type="button" class="btn">When will you hit Level 50?</button>
       </div>
@@ -129,16 +112,16 @@
     </form>
   </dialog>
 
-  <!-- Rendered result -->
+  <!-- Result -->
   <div id="cardWrap">
     <canvas id="summitCard"></canvas>
     <a id="dlCard" download="playerzero-summit-card.png" style="text-decoration:none;padding:10px 14px;border-radius:10px;background:#222;color:#fff;border:1px solid #444;display:inline-block">Download Card</a>
   </div>
 
   <script>
-    // ======== CONFIG (update paths) ========
+    // ======== CONFIG ========
     const SUMMIT_XP = 176_000_000;
-    const BASE_CARD_SRC = "/images/summit_base.png";        // blue card
+    const BASE_CARD_SRC = "/images/summit_base.png";         // blue card
     const ACHIEVED_CARD_SRC = "/images/summit_achieved.png"; // gold ACHIEVED card
 
     // ======== HOOKS ========
@@ -153,7 +136,6 @@
     const canvas = document.getElementById("summitCard");
     const dl = document.getElementById("dlCard");
 
-    // Safer: bind after DOM is ready + provide a fallback if <dialog> isn't supported
     document.addEventListener("DOMContentLoaded", () => {
       openBtn.addEventListener("click", () => {
         if (dlg && typeof dlg.showModal === "function") dlg.showModal();
@@ -171,6 +153,12 @@
       return `${mm}.${dd}.${yyyy}`;
     };
     const daysBetween = (a, b) => Math.max(1, Math.floor((b - a) / 86400000));
+
+    // Parse <input type="date"> as a LOCAL date (avoid timezone shift)
+    function parseLocalDate(dateStr){
+      const [y,m,d] = dateStr.split("-").map(Number);
+      return new Date(y, m-1, d); // local midnight
+    }
 
     function calcProjection(xp, startDate) {
       const today = new Date();
@@ -197,6 +185,17 @@
       });
     }
 
+    // Fit text to a max width (used for XP)
+    function drawFittedText(ctx, text, basePx, maxWidth, x, y, weight=900){
+      let size = basePx;
+      ctx.font = `${weight} ${size}px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif`;
+      while (ctx.measureText(text).width > maxWidth && size > 20){
+        size -= 2;
+        ctx.font = `${weight} ${size}px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif`;
+      }
+      ctx.fillText(text, x, y);
+    }
+
     async function drawCard({ name, xp, startDate, projectedDate, reached }) {
       const img = await loadImage(reached ? ACHIEVED_CARD_SRC : BASE_CARD_SRC);
       const ctx = canvas.getContext("2d");
@@ -205,6 +204,7 @@
       ctx.clearRect(0,0,canvas.width,canvas.height);
       ctx.drawImage(img, 0, 0);
 
+      // Base design size
       const W = 750, H = 1050, sx = canvas.width / W, sy = canvas.height / H;
       const scaled = (x, y) => [x * sx, y * sy];
       const setFont = (w, weight=700) =>
@@ -215,29 +215,31 @@
       ctx.shadowBlur = 4;
       ctx.shadowOffsetY = 1;
 
-      // Trainer Name (top-left)
+      // ---- Fine-tuned placements ----
+      // Name: move slightly DOWN from prior (was y=70)
       ctx.fillStyle = "#ffffff";
       setFont(54, 800);
-      let [nx, ny] = scaled(60, 70);
+      let [nx, ny] = scaled(60, 86); // ↓
       ctx.textAlign = "left";
       ctx.fillText((name || "Trainer").slice(0, 24), nx, ny);
 
-      // Start Date (top-right under label area)
+      // Start Date: move slightly UP from prior (was y=112)
       setFont(30, 800);
       ctx.textAlign = "right";
-      let [sdx, sdy] = scaled(690, 112);
+      let [sdx, sdy] = scaled(690, 98); // ↑
       ctx.fillText(fmtDateMDY(startDate), sdx, sdy);
 
-      // XP big number (bottom-left)
-      setFont(120, 900);
+      // XP: move slightly UP and shrink-to-fit width
       ctx.textAlign = "left";
-      let [xx, xy] = scaled(70, 880);
       ctx.fillStyle = "#ffffff";
-      ctx.fillText(fmtXP(xp), xx, xy);
+      const [xx, xy] = scaled(70, 840); // ↑
+      const xpText = fmtXP(xp);
+      const maxTextWidth = (canvas.width - xx - 40); // right margin
+      drawFittedText(ctx, xpText, Math.round(100*sx), maxTextWidth, xx, xy, 900);
 
-      // Projected Date (red, only on base card)
+      // Projected Date (red) — only on base card
       if (!reached) {
-        setFont(100, 900);
+        setFont(96, 900);
         ctx.fillStyle = "#ff2a2a";
         let [px, py] = scaled(70, 300);
         ctx.fillText(fmtDateMDY(projectedDate), px, py);
@@ -252,7 +254,7 @@
       try {
         const name = (nameInput.value || "").trim() || "Trainer";
         const xp = parseXP(xpInput.value);
-        const startDate = new Date(startInput.value);
+        const startDate = parseLocalDate(startInput.value); // fixed
         const { avgPerDay, reached, projected, daysNeeded } = calcProjection(xp, startDate);
 
         dlg.close();
