@@ -39,4 +39,241 @@
     .contact { margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 16px; font-size: clamp(0.8rem, 1.2vw, 1.1rem); }
     .social-links { display: flex; gap: 30px; align-items: center; flex-wrap: wrap; justify-content: center; }
     .social-links a { color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: clamp(0.8rem, 1.2vw, 1.1rem); }
-    .social-links a i { color: var(--pz-red); font-size: 1.2em
+    .social-links a i { color: var(--pz-red); font-size: 1.2em; transition: color .3s; }
+    .social-links a:hover i { color: #ff1a28; }
+
+    /* Summit CTA + results */
+    .cta { margin-top: 28px; display:flex; justify-content:center; }
+    .btn {
+      padding: 12px 18px; border: 0; border-radius: 10px; font-weight: 800; cursor: pointer;
+      background: var(--pz-red); color: #fff; position: relative; z-index: 1;
+    }
+
+    dialog#summitDialog { padding:0; border:0; border-radius:16px; max-width:520px; width:92%; }
+    dialog::backdrop { background: rgba(0,0,0,.6); }
+    #summitForm { background:#111; color:#fff; padding:24px; border-radius:16px; text-align:left; }
+    #summitForm label { display:block; margin:12px 0 6px; font-weight:600; }
+    #summitForm input {
+      width:100%; padding:10px; border-radius:10px; border:1px solid #333; background:#1a1a1a; color:#fff;
+    }
+    #calcNote { display:none; margin-top:12px; font-size:.9rem; color:#bbb; }
+
+    #cardWrap { margin-top:26px; display:none; flex-direction:column; align-items:center; gap:10px }
+    #summitCard { max-width:840px; width:100%; height:auto; border-radius:18px; }
+
+    @media (min-width:1024px){
+      .logo { width: clamp(500px, 37.5vw, 875px); }
+      .power-words { font-size: clamp(1.5rem, 3vw, 3rem); }
+      .teaser { font-size: clamp(0.9rem, 1.5vw, 1.2rem); }
+      .coming-soon { font-size: clamp(0.8rem, 1.2vw, 1.1rem); }
+    }
+  </style>
+</head>
+<body>
+  <div class="tagline">
+    <div class="line-one">It’s not what you’ve already accomplished…</div>
+    <div class="line-two">It’s what you’re about to…</div>
+  </div>
+
+  <img src="/images/A6-PlayerZero.png" alt="PlayerZero Logo" class="logo" />
+
+  <div class="core-message">
+    <div class="power-words">Track. Compete. Flex.</div>
+    <div class="teaser">
+      The must-have <span class="highlight">Pokémon GO</span> companion app for players who want to dive deeper into their stats, see how they stack up against the community, and flex their achievements.
+    </div>
+    <div class="coming-soon">Coming soon...</div>
+
+    <div class="contact">
+      <p>Curious to learn more or be the first to know when we launch? Connect with us directly:</p>
+      <div class="social-links">
+        <a href="#" onclick="navigator.clipboard.writeText('plyrZERO_Official'); alert('Discord handle plyrZERO_Official has been copied!'); return false;" title="Discord">
+          <i class="fa-brands fa-discord"></i>
+        </a>
+        <a href="https://www.reddit.com/user/plyrZERO_Official" target="_blank" title="Reddit">
+          <i class="fa-brands fa-reddit"></i>
+        </a>
+        <a href="mailto:official@plyrzero.com" title="Email">
+          <i class="fa-solid fa-envelope"></i>
+        </a>
+      </div>
+
+      <!-- Summit CTA (cryptic label) -->
+      <div class="cta">
+        <button id="openSummit" type="button" class="btn">When will you hit Level 50?</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <dialog id="summitDialog">
+    <form method="dialog" id="summitForm">
+      <h3 style="margin:0 0 8px">Summit Date Calculator</h3>
+      <p style="margin:0 0 12px;color:#ccc">Enter your Trainer Name, total XP, and the date you started playing.</p>
+
+      <label>Trainer Name</label>
+      <input id="nameInput" placeholder="e.g., LumbrJackson" required>
+
+      <label>Total XP</label>
+      <input id="xpInput" inputmode="numeric" placeholder="e.g., 74,143,916" required>
+
+      <label>Start Date</label>
+      <input id="startInput" type="date" required>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px">
+        <button value="cancel" type="button" onclick="document.getElementById('summitDialog').close()" style="padding:10px 14px;border-radius:10px;border:0;background:#333;color:#fff">Cancel</button>
+        <button id="calcBtn" value="default" class="btn" style="padding:10px 14px">Submit</button>
+      </div>
+
+      <p id="calcNote"></p>
+    </form>
+  </dialog>
+
+  <!-- Rendered result -->
+  <div id="cardWrap">
+    <canvas id="summitCard"></canvas>
+    <a id="dlCard" download="playerzero-summit-card.png" style="text-decoration:none;padding:10px 14px;border-radius:10px;background:#222;color:#fff;border:1px solid #444;display:inline-block">Download Card</a>
+  </div>
+
+  <script>
+    // ======== CONFIG (update paths) ========
+    const SUMMIT_XP = 176_000_000;
+    const BASE_CARD_SRC = "/images/summit_base.png";        // blue card
+    const ACHIEVED_CARD_SRC = "/images/summit_achieved.png"; // gold ACHIEVED card
+
+    // ======== HOOKS ========
+    const openBtn = document.getElementById("openSummit");
+    const dlg = document.getElementById("summitDialog");
+    const form = document.getElementById("summitForm");
+    const nameInput = document.getElementById("nameInput");
+    const xpInput = document.getElementById("xpInput");
+    const startInput = document.getElementById("startInput");
+    const note = document.getElementById("calcNote");
+    const wrap = document.getElementById("cardWrap");
+    const canvas = document.getElementById("summitCard");
+    const dl = document.getElementById("dlCard");
+
+    // Safer: bind after DOM is ready + provide a fallback if <dialog> isn't supported
+    document.addEventListener("DOMContentLoaded", () => {
+      openBtn.addEventListener("click", () => {
+        if (dlg && typeof dlg.showModal === "function") dlg.showModal();
+        else dlg.setAttribute("open","open");
+      });
+    });
+
+    // ======== HELPERS ========
+    const parseXP = (s) => Number(String(s || "").replace(/[^0-9.]/g, "")) || 0;
+    const fmtXP = (n) => n.toLocaleString(undefined, { maximumFractionDigits: 0 });
+    const fmtDateMDY = (d) => {
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      const dd = String(d.getDate()).padStart(2,"0");
+      const yyyy = d.getFullYear();
+      return `${mm}.${dd}.${yyyy}`;
+    };
+    const daysBetween = (a, b) => Math.max(1, Math.floor((b - a) / 86400000));
+
+    function calcProjection(xp, startDate) {
+      const today = new Date();
+      if (startDate > today) throw new Error("Start date cannot be in the future.");
+      const daysElapsed = daysBetween(startDate, today);
+      const avgPerDay = xp / daysElapsed;
+
+      if (xp >= SUMMIT_XP) return { avgPerDay, reached:true, projected: today, daysNeeded: 0 };
+      if (avgPerDay <= 0) throw new Error("Average XP/day is zero.");
+
+      const remaining = SUMMIT_XP - xp;
+      const daysNeeded = Math.ceil(remaining / avgPerDay);
+      const projected = new Date(today.getTime() + daysNeeded * 86400000);
+      return { avgPerDay, reached:false, projected, daysNeeded };
+    }
+
+    function loadImage(src) {
+      return new Promise((res, rej) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => res(img);
+        img.onerror = rej;
+        img.src = src;
+      });
+    }
+
+    async function drawCard({ name, xp, startDate, projectedDate, reached }) {
+      const img = await loadImage(reached ? ACHIEVED_CARD_SRC : BASE_CARD_SRC);
+      const ctx = canvas.getContext("2d");
+      canvas.width = img.width;   // expect 750
+      canvas.height = img.height; // expect 1050
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.drawImage(img, 0, 0);
+
+      const W = 750, H = 1050, sx = canvas.width / W, sy = canvas.height / H;
+      const scaled = (x, y) => [x * sx, y * sy];
+      const setFont = (w, weight=700) =>
+        ctx.font = `${weight} ${Math.round(w * sx)}px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif`;
+
+      ctx.textBaseline = "top";
+      ctx.shadowColor = "rgba(0,0,0,.55)";
+      ctx.shadowBlur = 4;
+      ctx.shadowOffsetY = 1;
+
+      // Trainer Name (top-left)
+      ctx.fillStyle = "#ffffff";
+      setFont(54, 800);
+      let [nx, ny] = scaled(60, 70);
+      ctx.textAlign = "left";
+      ctx.fillText((name || "Trainer").slice(0, 24), nx, ny);
+
+      // Start Date (top-right under label area)
+      setFont(30, 800);
+      ctx.textAlign = "right";
+      let [sdx, sdy] = scaled(690, 112);
+      ctx.fillText(fmtDateMDY(startDate), sdx, sdy);
+
+      // XP big number (bottom-left)
+      setFont(120, 900);
+      ctx.textAlign = "left";
+      let [xx, xy] = scaled(70, 880);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillText(fmtXP(xp), xx, xy);
+
+      // Projected Date (red, only on base card)
+      if (!reached) {
+        setFont(100, 900);
+        ctx.fillStyle = "#ff2a2a";
+        let [px, py] = scaled(70, 300);
+        ctx.fillText(fmtDateMDY(projectedDate), px, py);
+      }
+
+      dl.href = canvas.toDataURL("image/png");
+    }
+
+    // ======== SUBMIT ========
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try {
+        const name = (nameInput.value || "").trim() || "Trainer";
+        const xp = parseXP(xpInput.value);
+        const startDate = new Date(startInput.value);
+        const { avgPerDay, reached, projected, daysNeeded } = calcProjection(xp, startDate);
+
+        dlg.close();
+
+        note.style.display = "block";
+        if (reached) {
+          note.textContent = `You’ve already surpassed 176,000,000 XP — Level 50 Achieved.`;
+        } else {
+          note.textContent =
+            `Avg: ${Math.round(avgPerDay).toLocaleString()} XP/day · `
+            + `~${daysNeeded.toLocaleString()} days to Summit · `
+            + `Projected ${fmtDateMDY(projected)}`;
+        }
+
+        await drawCard({ name, xp, startDate, projectedDate: projected, reached });
+        wrap.style.display = "flex";
+        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      } catch (err) {
+        alert(err.message || "Something went wrong. Check your inputs.");
+      }
+    });
+  </script>
+</body>
+</html>
