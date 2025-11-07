@@ -29,7 +29,6 @@
     .power-words { font-size: clamp(1.2rem, 4vw, 2.5rem); font-weight: 800; margin: 20px 0; }
     .teaser { font-size: clamp(0.9rem, 2vw, 1.2rem); color: #ddd; margin: 20px; }
     .highlight { color: var(--pz-red); }
-    .coming-soon { color: #ccc; margin-top: 20px; font-size: clamp(0.8rem, 1.8vw, 1.1rem); }
 
     .contact { margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 16px; font-size: clamp(0.8rem, 1.2vw, 1.1rem); }
     .social-links { display: flex; gap: 30px; align-items: center; flex-wrap: wrap; justify-content: center; }
@@ -37,7 +36,7 @@
     .social-links a i { color: var(--pz-red); font-size: 1.2em; transition: color .3s; }
     .social-links a:hover i { color: #ff1a28; }
 
-    .cta { margin-top: 28px; display:flex; justify-content:center; }
+    .cta { margin-top: 24px; display:flex; justify-content:center; }
     .btn { padding: 12px 18px; border: 0; border-radius: 10px; font-weight: 800; cursor: pointer; background: var(--pz-red); color: #fff; position: relative; z-index: 1; }
 
     dialog#summitDialog { padding:0; border:0; border-radius:16px; max-width:520px; width:92%; }
@@ -48,8 +47,13 @@
     #calcNote { display:none; margin-top:12px; font-size:.9rem; color:#bbb; }
 
     #cardWrap { margin-top:26px; display:none; flex-direction:column; align-items:center; gap:10px }
-    /* smaller on page */
     #summitCard { width: clamp(320px, 70vw, 520px); height:auto; border-radius:18px; }
+
+    .disclaimer {
+      margin-top: 18px;
+      font-size: 0.6rem;
+      color: #777;
+    }
   </style>
 </head>
 <body>
@@ -62,32 +66,38 @@
 
   <div class="core-message">
     <div class="power-words">Grind. Compete. Flex.</div>
+
     <div class="teaser">
       The must-have <span class="highlight">Pokémon GO</span> companion app for players who want to dive deeper into their stats, see how they stack up against the community, and flex their achievements.
+      <br><br>
+      Become one of the <span class="highlight">first 100 players</span> with <strong>early access</strong>, a
+      <strong>complimentary first year</strong>, and <strong>priority access to affiliate opportunities</strong>.
     </div>
-    <div class="coming-soon">Coming soon...</div>
+
+    <!-- CTA moved up; text updated -->
+    <div class="cta">
+      <button id="openSummit" type="button" class="btn">Join the first 100</button>
+    </div>
 
     <div class="contact">
-      <p>Curious to learn more or be the first to know when we launch? Connect with us directly:</p>
+      <p>Curious or want to connect with the team behind PlayerZERO? Find us here:</p>
       <div class="social-links">
-        <a href="#" onclick="navigator.clipboard.writeText('plyrZERO_Official'); alert('Discord handle plyrZERO_Official has been copied!'); return false;" title="Discord">
+        <a href="https://discord.gg/9dAeR84Ugv" target="_blank" title="Discord">
           <i class="fa-brands fa-discord"></i>
         </a>
-        <a href="https://www.reddit.com/user/plyrZERO_Official" target="_blank" title="Reddit">
+        <a href="https://www.reddit.com/r/plyrZERO_HQ/" target="_blank" title="Reddit">
           <i class="fa-brands fa-reddit"></i>
         </a>
-        <a href="mailto:official@plyrzero.com" title="Email">
-          <i class="fa-solid fa-envelope"></i>
-        </a>
-      </div>
-
-      <div class="cta">
-        <button id="openSummit" type="button" class="btn">When will you hit Level 50?</button>
+        <!-- Email option removed -->
       </div>
     </div>
+
+    <p class="disclaimer">
+      PlayerZERO is an independent companion experience and is not affiliated with or endorsed by Niantic, Inc. or Pokémon GO.
+    </p>
   </div>
 
-  <!-- Modal -->
+  <!-- Modal (currently still used by the CTA button) -->
   <dialog id="summitDialog">
     <form method="dialog" id="summitForm">
       <h3 style="margin:0 0 8px">Summit Date Calculator</h3>
@@ -120,8 +130,8 @@
   <script>
     // ======== CONFIG ========
     const SUMMIT_XP = 176_000_000;
-    const BASE_CARD_SRC = "/images/summit_base.png";         // blue card (Projected)
-    const ACHIEVED_CARD_SRC = "/images/summit_achieved.png"; // gold card (Achieved)
+    const BASE_CARD_SRC = "/images/summit_base.png";
+    const ACHIEVED_CARD_SRC = "/images/summit_achieved.png";
 
     // ======== HOOKS ========
     const openBtn = document.getElementById("openSummit");
@@ -153,7 +163,6 @@
     };
     const daysBetween = (a, b) => Math.max(1, Math.floor((b - a) / 86400000));
 
-    // Parse <input type="date"> as LOCAL date (avoid timezone shifts)
     function parseLocalDate(dateStr){
       const [y,m,d] = dateStr.split("-").map(Number);
       return new Date(y, m-1, d);
@@ -184,7 +193,6 @@
       });
     }
 
-    // Fit text to a max width (used for name + XP)
     function drawFittedText(ctx, text, basePx, maxWidth, x, y, weight=900){
       let size = basePx;
       ctx.font = `${weight} ${size}px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif`;
@@ -195,16 +203,14 @@
       ctx.fillText(text, x, y);
     }
 
-    // ======== RENDER CARD (tuned placements) ========
     async function drawCard({ name, xp, startDate, projectedDate, reached }) {
       const img = await loadImage(reached ? ACHIEVED_CARD_SRC : BASE_CARD_SRC);
       const ctx = canvas.getContext("2d");
-      canvas.width = img.width;   // expect 750
-      canvas.height = img.height; // expect 1050
+      canvas.width = img.width;
+      canvas.height = img.height;
       ctx.clearRect(0,0,canvas.width,canvas.height);
       ctx.drawImage(img, 0, 0);
 
-      // Base design size
       const W = 750, H = 1050, sx = canvas.width / W, sy = canvas.height / H;
       const scaled = (x, y) => [x * sx, y * sy];
       const setFont = (w, weight=700) =>
@@ -215,67 +221,4 @@
       ctx.shadowBlur = 4;
       ctx.shadowOffsetY = 1;
 
-      // Trainer Name (same spot, slightly smaller, capped to 15 chars, auto-fit)
       ctx.fillStyle = "#ffffff";
-      const nameText = (name || "Trainer").slice(0, 15);
-      let [nx, ny] = scaled(60, 86);
-      ctx.textAlign = "left";
-      const nameMaxW = Math.round(560 * sx);
-      drawFittedText(ctx, nameText, Math.round(52 * sx), nameMaxW, nx, ny, 800);
-
-      // Start Date
-      setFont(30, 800);
-      ctx.textAlign = "right";
-      let [sdx, sdy] = scaled(690, 98);
-      ctx.fillText(fmtDateMDY(startDate), sdx, sdy);
-
-      // XP (slightly smaller and higher; fits up to 4,000,000,000)
-      ctx.textAlign = "left";
-      ctx.fillStyle = "#ffffff";
-      const [xx, xy] = scaled(70, 820);
-      const xpText = fmtXP(xp);
-      const xpMaxW = canvas.width - xx - Math.round(40 * sx);
-      drawFittedText(ctx, xpText, Math.round(92 * sx), xpMaxW, xx, xy, 900);
-
-      // Projected Date (only on base/blue card)
-      if (!reached) {
-        setFont(96, 900);
-        ctx.fillStyle = "#ff2a2a";
-        let [px, py] = scaled(70, 300);
-        ctx.fillText(fmtDateMDY(projectedDate), px, py);
-      }
-
-      dl.href = canvas.toDataURL("image/png");
-    }
-
-    // ======== SUBMIT ========
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      try {
-        const name = (nameInput.value || "").trim() || "Trainer";
-        const xp = parseXP(xpInput.value);
-        const startDate = parseLocalDate(startInput.value); // local, no TZ drift
-        const { avgPerDay, reached, projected, daysNeeded } = calcProjection(xp, startDate);
-
-        dlg.close();
-
-        note.style.display = "block";
-        if (reached) {
-          note.textContent = `You’ve already surpassed 176,000,000 XP — Level 50 Achieved.`;
-        } else {
-          note.textContent =
-            `Avg: ${Math.round(avgPerDay).toLocaleString()} XP/day · ` +
-            `~${daysNeeded.toLocaleString()} days to Summit · ` +
-            `Projected ${fmtDateMDY(projected)}`;
-        }
-
-        await drawCard({ name, xp, startDate, projectedDate: projected, reached });
-        wrap.style.display = "flex";
-        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-      } catch (err) {
-        alert(err.message || "Something went wrong. Check your inputs.");
-      }
-    });
-  </script>
-</body>
-</html>
