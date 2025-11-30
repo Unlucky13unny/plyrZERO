@@ -32,7 +32,7 @@
     .tagline {
       animation: fadeIn 2s forwards, fadeOut 2s 2.5s forwards;
       margin-bottom: 30px;
-      pointer-events:none;
+      pointer-events: none;
     }
 
     .tagline .line-one {
@@ -74,8 +74,11 @@
 
     .cta {
       margin-top: 24px;
-      display:flex;
-      justify-content:center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     .btn {
@@ -86,8 +89,8 @@
       cursor: pointer;
       background: var(--pz-red);
       color: #fff;
-      text-decoration:none;
-      display:inline-block;
+      text-decoration: none;
+      display: inline-block;
     }
 
     .contact {
@@ -151,9 +154,29 @@
     </div>
 
     <div class="cta">
-      <button id="applyBtn" type="button" class="btn">
+      <!-- Main CTA button as a link -->
+      <a
+        id="applyLink"
+        href="https://first100application.plyrzero.com"
+        class="btn"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         Apply to join the First 100
-      </button>
+      </a>
+
+      <!-- Plain text backup link -->
+      <p style="font-size:0.8rem; color:#bbb; margin:0;">
+        If the button doesn't work, 
+        <a
+          href="https://first100application.plyrzero.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="color:#e30613; text-decoration:underline;"
+        >
+          tap here to open the application form
+        </a>.
+      </p>
     </div>
 
     <div class="contact">
@@ -174,14 +197,13 @@
   </div>
 
   <script>
-    // Force navigation on click, in a new tab
+    // Simple debug hook so you can see if the click fires at all
     (function () {
-      var btn = document.getElementById('applyBtn');
-      if (!btn) return;
-      btn.addEventListener('click', function () {
-        window.open('https://first100application.plyrzero.com', '_blank');
-      });
-    })();
-  </script>
-</body>
-</html>
+      var link = document.getElementById('applyLink');
+      if (!link) return;
+
+      link.addEventListener('click', function (e) {
+        console.log('Apply link clicked', e);
+        // We intentionally do NOT preventDefault here,
+        // so the browser's normal navigation should still happen.
+      }
