@@ -151,9 +151,9 @@
     </div>
 
     <div class="cta">
-      <a href="https://first100application.plyrzero.com" class="btn">
+      <button id="applyBtn" type="button" class="btn">
         Apply to join the First 100
-      </a>
+      </button>
     </div>
 
     <div class="contact">
@@ -173,5 +173,15 @@
     </p>
   </div>
 
+  <script>
+    // Force navigation on click, in a new tab
+    (function () {
+      var btn = document.getElementById('applyBtn');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        window.open('https://first100application.plyrzero.com', '_blank');
+      });
+    })();
+  </script>
 </body>
 </html>
