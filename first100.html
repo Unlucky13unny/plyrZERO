@@ -37,8 +37,9 @@
     .social-links a:hover i { color: #ff1a28; }
 
     .cta { margin-top: 24px; display:flex; justify-content:center; }
-    .btn { padding: 12px 18px; border: 0; border-radius: 10px; font-weight: 800; cursor: pointer; background: var(--pz-red); color: #fff; position: relative; z-index: 1; }
+    .btn { padding: 12px 18px; border: 0; border-radius: 10px; font-weight: 800; cursor: pointer; background: var(--pz-red); color: #fff; position: relative; z-index: 1; text-decoration:none; display:inline-block; }
 
+    /* Modal + card styles remain in case you reuse later */
     dialog#summitDialog { padding:0; border:0; border-radius:16px; max-width:520px; width:92%; }
     dialog::backdrop { background: rgba(0,0,0,.6); }
     #summitForm { background:#111; color:#fff; padding:24px; border-radius:16px; text-align:left; }
@@ -74,9 +75,9 @@
       <strong>complimentary first year</strong>, and <strong>priority access to affiliate opportunities</strong>.
     </div>
 
-    <!-- CTA moved up; text updated -->
+    <!-- Updated CTA -->
     <div class="cta">
-      <button id="openSummit" type="button" class="btn">Apply to join the First 100</button>
+      <a href="https://first100application.plyrzero.com" class="btn">Apply to join the First 100</a>
     </div>
 
     <div class="contact">
@@ -88,7 +89,6 @@
         <a href="https://www.reddit.com/r/plyrZERO_HQ/" target="_blank" title="Reddit">
           <i class="fa-brands fa-reddit"></i>
         </a>
-        <!-- Email option removed -->
       </div>
     </div>
 
@@ -97,7 +97,7 @@
     </p>
   </div>
 
-  <!-- Modal (currently still used by the CTA button) -->
+  <!-- We leave modal/card code here in case you reuse it later, but it's not active -->
   <dialog id="summitDialog">
     <form method="dialog" id="summitForm">
       <h3 style="margin:0 0 8px">Summit Date Calculator</h3>
@@ -113,113 +113,4 @@
       <input id="startInput" type="date" required>
 
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px">
-        <button value="cancel" type="button" onclick="document.getElementById('summitDialog').close()" style="padding:10px 14px;border-radius:10px;border:0;background:#333;color:#fff">Cancel</button>
-        <button id="calcBtn" value="default" class="btn" style="padding:10px 14px">Submit</button>
-      </div>
-
-      <p id="calcNote"></p>
-    </form>
-  </dialog>
-
-  <!-- Result -->
-  <div id="cardWrap">
-    <canvas id="summitCard"></canvas>
-    <a id="dlCard" download="playerzero-summit-card.png" style="text-decoration:none;padding:10px 14px;border-radius:10px;background:#222;color:#fff;border:1px solid #444;display:inline-block">Download Card</a>
-  </div>
-
-  <script>
-    // ======== CONFIG ========
-    const SUMMIT_XP = 176_000_000;
-    const BASE_CARD_SRC = "/images/summit_base.png";
-    const ACHIEVED_CARD_SRC = "/images/summit_achieved.png";
-
-    // ======== HOOKS ========
-    const openBtn = document.getElementById("openSummit");
-    const dlg = document.getElementById("summitDialog");
-    const form = document.getElementById("summitForm");
-    const nameInput = document.getElementById("nameInput");
-    const xpInput = document.getElementById("xpInput");
-    const startInput = document.getElementById("startInput");
-    const note = document.getElementById("calcNote");
-    const wrap = document.getElementById("cardWrap");
-    const canvas = document.getElementById("summitCard");
-    const dl = document.getElementById("dlCard");
-
-    document.addEventListener("DOMContentLoaded", () => {
-      openBtn.addEventListener("click", () => {
-        if (dlg && typeof dlg.showModal === "function") dlg.showModal();
-        else dlg.setAttribute("open","open");
-      });
-    });
-
-    // ======== HELPERS ========
-    const parseXP = (s) => Number(String(s || "").replace(/[^0-9.]/g, "")) || 0;
-    const fmtXP = (n) => n.toLocaleString(undefined, { maximumFractionDigits: 0 });
-    const fmtDateMDY = (d) => {
-      const mm = String(d.getMonth()+1).padStart(2,"0");
-      const dd = String(d.getDate()).padStart(2,"0");
-      const yyyy = d.getFullYear();
-      return `${mm}.${dd}.${yyyy}`;
-    };
-    const daysBetween = (a, b) => Math.max(1, Math.floor((b - a) / 86400000));
-
-    function parseLocalDate(dateStr){
-      const [y,m,d] = dateStr.split("-").map(Number);
-      return new Date(y, m-1, d);
-    }
-
-    function calcProjection(xp, startDate) {
-      const today = new Date();
-      if (startDate > today) throw new Error("Start date cannot be in the future.");
-      const daysElapsed = daysBetween(startDate, today);
-      const avgPerDay = xp / daysElapsed;
-
-      if (xp >= SUMMIT_XP) return { avgPerDay, reached:true, projected: today, daysNeeded: 0 };
-      if (avgPerDay <= 0) throw new Error("Average XP/day is zero.");
-
-      const remaining = SUMMIT_XP - xp;
-      const daysNeeded = Math.ceil(remaining / avgPerDay);
-      const projected = new Date(today.getTime() + daysNeeded * 86400000);
-      return { avgPerDay, reached:false, projected, daysNeeded };
-    }
-
-    function loadImage(src) {
-      return new Promise((res, rej) => {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.onload = () => res(img);
-        img.onerror = rej;
-        img.src = src;
-      });
-    }
-
-    function drawFittedText(ctx, text, basePx, maxWidth, x, y, weight=900){
-      let size = basePx;
-      ctx.font = `${weight} ${size}px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif`;
-      while (ctx.measureText(text).width > maxWidth && size > 20){
-        size -= 2;
-        ctx.font = `${weight} ${size}px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif`;
-      }
-      ctx.fillText(text, x, y);
-    }
-
-    async function drawCard({ name, xp, startDate, projectedDate, reached }) {
-      const img = await loadImage(reached ? ACHIEVED_CARD_SRC : BASE_CARD_SRC);
-      const ctx = canvas.getContext("2d");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      ctx.drawImage(img, 0, 0);
-
-      const W = 750, H = 1050, sx = canvas.width / W, sy = canvas.height / H;
-      const scaled = (x, y) => [x * sx, y * sy];
-      const setFont = (w, weight=700) =>
-        ctx.font = `${weight} ${Math.round(w * sx)}px system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif`;
-
-      ctx.textBaseline = "top";
-      ctx.shadowColor = "rgba(0,0,0,.55)";
-      ctx.shadowBlur = 4;
-      ctx.shadowOffsetY = 1;
-
-      ctx.fillStyle = "#ffffff";
-
+        <button value="cancel" type="button" onclick="document.getEleme
