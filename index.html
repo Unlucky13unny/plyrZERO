@@ -3,163 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PlayerZero</title>
-
-  <link rel="icon" type="image/png" href="/images/c5.png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <title>First100 Test</title>
   <style>
-    :root { --pz-red:#e30613; }
-
     body {
-      margin: 0;
-      background: linear-gradient(to bottom, #000000, #222222);
-      color: #fff;
-      text-align: center;
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
-
-    .tagline, .logo, .core-message { opacity: 0; }
-    @keyframes fadeIn { to { opacity: 1; } }
-    @keyframes fadeOut { to { opacity: 0; } }
-
-    .tagline {
-      animation: fadeIn 2s forwards, fadeOut 2s 2.5s forwards;
-      margin-bottom: 30px;
-      pointer-events:none;
-    }
-
-    .tagline .line-one {
-      font-size: clamp(1.2rem, 3vw, 2.2rem);
-      font-weight: 400;
-    }
-
-    .tagline .line-two {
-      font-size: clamp(1.5rem, 4vw, 2.8rem);
-      font-weight: 600;
-      margin-top: 10px;
-    }
-
-    .logo {
-      width: clamp(250px, 62.5vw, 500px);
-      height: auto;
-      margin-bottom: 30px;
-      animation: fadeIn 2s 5s forwards;
-    }
-
-    .core-message {
-      animation: fadeIn 2s 7s forwards;
-      max-width: 800px;
-    }
-
-    .power-words {
-      font-size: clamp(1.2rem, 4vw, 2.5rem);
-      font-weight: 800;
-      margin: 20px 0;
-    }
-
-    .teaser {
-      font-size: clamp(0.9rem, 2vw, 1.2rem);
-      color: #ddd;
-      margin: 20px;
-    }
-
-    .highlight { color: var(--pz-red); }
-
-    .cta {
-      margin-top: 24px;
+      background:#111;
+      color:#fff;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       display:flex;
+      flex-direction:column;
+      align-items:center;
       justify-content:center;
+      min-height:100vh;
+      margin:0;
+      text-align:center;
     }
-
-    .btn {
-      padding: 12px 18px;
-      border: 0;
-      border-radius: 10px;
-      font-weight: 800;
-      cursor: pointer;
-      background: var(--pz-red);
-      color: #fff;
-      text-decoration:none;
-      display:inline-block;
-    }
-
-    .contact {
-      margin-top: 30px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      font-size: clamp(0.8rem, 1.2vw, 1.1rem);
-    }
-
-    .social-links {
-      display: flex;
-      gap: 30px;
-      align-items: center;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .social-links a {
-      color: #fff;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: clamp(0.8rem, 1.2vw, 1.1rem);
-    }
-
-    .social-links a i {
-      color: var(--pz-red);
-      font-size: 1.2em;
-      transition: color .3s;
-    }
-
-    .social-links a:hover i { color: #ff1a28; }
-
-    .disclaimer {
-      margin-top: 18px;
-      font-size: 0.6rem;
-      color: #777;
+    h1 { font-size: 2rem; margin-bottom: 1rem; }
+    a {
+      color:#e30613;
+      font-size:1.25rem;
+      text-decoration:underline;
+      cursor:pointer;
     }
   </style>
 </head>
-
 <body>
-  <div class="tagline">
-    <div class="line-one">It’s not what you’ve already accomplished…</div>
-    <div class="line-two">It’s what you’re about to…</div>
-  </div>
+  <h1>FIRST100 TEST PAGE</h1>
+  <p>If you can see this text, you are definitely loading <strong>index.html</strong> from GitHub Pages.</p>
 
-  <img src="/images/A6-PlayerZero.png" alt="PlayerZero Logo" class="logo" />
-
-  <div class="core-message">
-    <div class="power-words">Grind. Compete. Flex.</div>
-
-    <div class="teaser">
-      The must-have <span class="highlight">Pokémon GO</span> companion app for players who want to dive deeper into their stats, see how they stack up against the community, and flex their achievements.
-      <br><br>
-      Become one of the <span class="highlight">first 100 players</span> with <strong>early access</strong>, a
-      <strong>complimentary first year</strong>, and <strong>priority access to affiliate opportunities</strong>.
-    </div>
-
-    <div class="cta">
-      <a href="https://first100application.plyrzero.com" class="btn">
-        Apply to join the First 100
-      </a>
-    </div>
-
-    <div class="contact">
-      <p>Curious or want to connect with the team behind PlayerZERO? Find us here:</p>
-      <div class="social-links">
-        <a href="https://discord.gg/9dAeR84Ugv" target="_blank" title="Discord">
-          <i class="fa-brands fa-discord"></i>
-        </a>
-        <a href="https://www.reddit.com/r/plyrZERO_HQ/" target_
+  <p style="margin-top:2rem;">
+    <a href="https://first100application.plyrzero.com">
+      👉 Click here to open the First 100 application
+    </a>
+  </p>
+</body>
+</html>
