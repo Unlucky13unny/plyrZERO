@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root { --pz-red:#e30613; }
+
     body {
       margin: 0;
       background: linear-gradient(to bottom, #000000, #222222);
@@ -17,27 +18,90 @@
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       min-height: 100vh; padding: 20px;
     }
+
     .tagline, .logo, .core-message { opacity: 0; }
     @keyframes fadeIn { to { opacity: 1; } }
     @keyframes fadeOut { to { opacity: 0; } }
-    .tagline { animation: fadeIn 2s forwards, fadeOut 2s 2.5s forwards; margin-bottom: 30px; pointer-events:none; }
-    .tagline .line-one { font-size: clamp(1.2rem, 3vw, 2.2rem); font-weight: 400; }
-    .tagline .line-two { font-size: clamp(1.5rem, 4vw, 2.8rem); font-weight: 600; margin-top: 10px; }
 
-    .logo { width: clamp(250px, 62.5vw, 500px); height: auto; margin-bottom: 30px; animation: fadeIn 2s 5s forwards; }
-    .core-message { animation: fadeIn 2s 7s forwards; max-width: 800px; }
-    .power-words { font-size: clamp(1.2rem, 4vw, 2.5rem); font-weight: 800; margin: 20px 0; }
-    .teaser { font-size: clamp(0.9rem, 2vw, 1.2rem); color: #ddd; margin: 20px; }
+    /* Tighten overall vertical spacing so you don’t scroll */
+    .tagline { animation: fadeIn 2s forwards, fadeOut 2s 2.5s forwards; margin-bottom: 18px; pointer-events:none; }
+    .tagline .line-one { font-size: clamp(1.05rem, 2.6vw, 2.0rem); font-weight: 400; }
+    .tagline .line-two { font-size: clamp(1.25rem, 3.4vw, 2.5rem); font-weight: 600; margin-top: 6px; }
+
+    .logo {
+      width: clamp(230px, 55vw, 460px);
+      height: auto;
+      margin-bottom: 16px;
+      animation: fadeIn 2s 5s forwards;
+    }
+
+    .core-message { animation: fadeIn 2s 7s forwards; max-width: 760px; }
+
+    .power-words {
+      font-size: clamp(1.05rem, 3.2vw, 2.2rem);
+      font-weight: 800;
+      margin: 10px 0 10px;
+    }
+
+    .teaser {
+      font-size: clamp(0.88rem, 1.8vw, 1.08rem);
+      color: #ddd;
+      margin: 10px 0 8px;
+      line-height: 1.42;
+    }
+
     .highlight { color: var(--pz-red); }
 
-    .contact { margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 16px; font-size: clamp(0.8rem, 1.2vw, 1.1rem); }
-    .social-links { display: flex; gap: 30px; align-items: center; flex-wrap: wrap; justify-content: center; }
-    .social-links a { color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-size: clamp(0.8rem, 1.2vw, 1.1rem); }
-    .social-links a i { color: var(--pz-red); font-size: 1.2em; transition: color .3s; }
-    .social-links a:hover i { color: #ff1a28; }
+    .cta { margin-top: 12px; display:flex; justify-content:center; }
+    .btn {
+      padding: 11px 16px;
+      border: 0;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      background: var(--pz-red);
+      color: #fff;
+      position: relative;
+      z-index: 1;
+      text-decoration:none;
+      display:inline-block;
+    }
 
-    .cta { margin-top: 24px; display:flex; justify-content:center; }
-    .btn { padding: 12px 18px; border: 0; border-radius: 10px; font-weight: 800; cursor: pointer; background: var(--pz-red); color: #fff; position: relative; z-index: 1; text-decoration:none; display:inline-block; }
+    .contact {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      font-size: clamp(0.8rem, 1.1vw, 1.0rem);
+    }
+
+    .contact p { margin: 0; }
+
+    .social-links {
+      display: flex;
+      gap: 26px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .social-links a {
+      color: #fff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: clamp(0.8rem, 1.1vw, 1.0rem);
+    }
+
+    .social-links a i {
+      color: var(--pz-red);
+      font-size: 1.2em;
+      transition: color .3s;
+    }
+
+    .social-links a:hover i { color: #ff1a28; }
 
     /* Modal + card styles remain in case you reuse later */
     dialog#summitDialog { padding:0; border:0; border-radius:16px; max-width:520px; width:92%; }
@@ -51,9 +115,24 @@
     #summitCard { width: clamp(320px, 70vw, 520px); height:auto; border-radius:18px; }
 
     .disclaimer {
-      margin-top: 18px;
-      font-size: 0.6rem;
+      margin-top: 10px;
+      font-size: 0.58rem;
       color: #777;
+    }
+
+    /* Extra safety for shorter screens (TikTok in-app browser / laptops) */
+    @media (max-height: 800px) {
+      .logo { margin-bottom: 12px; }
+      .power-words { margin: 8px 0; }
+      .teaser { font-size: 0.92rem; line-height: 1.38; }
+      .contact { margin-top: 14px; }
+    }
+
+    @media (max-height: 720px) {
+      .tagline { margin-bottom: 12px; }
+      .logo { width: clamp(210px, 50vw, 420px); margin-bottom: 10px; }
+      .cta { margin-top: 10px; }
+      .disclaimer { margin-top: 8px; }
     }
   </style>
 </head>
@@ -68,39 +147,37 @@
   <div class="core-message">
     <div class="power-words">Grind. Compete. Flex.</div>
 
-   <div class="teaser">
-  <strong>
-    <span class="highlight">PlayerZERO</span> is a free
-    <span class="highlight">Pokémon GO</span> companion app built for grinders.
-  </strong>
-  <br><br>
+    <div class="teaser">
+      <strong>
+        <span class="highlight">PlayerZERO</span> is a free
+        <span class="highlight">Pokémon GO</span> companion app built for grinders.
+      </strong>
+      <br><br>
 
-  Track your progress through simple screenshot uploads and see how you compare
-  weekly, monthly, and all time across your area, your country, and the global community.
-  <br><br>
+      Track your progress through simple screenshot uploads and see how you compare
+      weekly, monthly, and all time across your area, your country, and the global community.
+      <br><br>
 
-  Search for nearby players, link your socials, and connect with the people you keep running into.
-  <br><br>
+      Search for nearby players, link your socials, and connect with the people you keep running into.
+      <br><br>
 
-  Built to create a community for trainers who want to track their grind on another level.
-  <br><br>
+      Built to create a community for trainers who want to track their grind on another level.
+      <br><br>
 
-  <strong>I don’t sell user data.</strong> I don’t run ads.
-</div>
+      <strong>I don’t sell user data.</strong> I don’t run ads.
+    </div>
 
-
-    <!-- Updated CTA -->
     <div class="cta">
-      <a href="https://first100application.plyrzero.com" class="btn">Sign up for PlayerZERO</a>
+      <a href="https://plyrzero.com" class="btn">Sign up for PlayerZERO</a>
     </div>
 
     <div class="contact">
       <p>Curious or want to connect with the team behind PlayerZERO? Find us here:</p>
       <div class="social-links">
-        <a href="https://discord.gg/9dAeR84Ugv" target="_blank" title="Discord">
+        <a href="https://discord.gg/9dAeR84Ugv" target="_blank" title="Discord" rel="noopener">
           <i class="fa-brands fa-discord"></i>
         </a>
-        <a href="https://www.reddit.com/r/plyrZERO_HQ/" target="_blank" title="Reddit">
+        <a href="https://www.reddit.com/r/plyrZERO_HQ/" target="_blank" title="Reddit" rel="noopener">
           <i class="fa-brands fa-reddit"></i>
         </a>
       </div>
@@ -196,6 +273,5 @@
       });
     }
   </script>
-
 </body>
 </html>
